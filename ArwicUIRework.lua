@@ -34,7 +34,6 @@ local function ReworkTalents()
 
     local tabDim = 35
     local tabSep = 10
-    local tabYOffset = 35
     local tabXOffset = 2
     local numSpecs = GetNumSpecializations()
     for i = 1, numSpecs, 1 do
@@ -42,9 +41,15 @@ local function ReworkTalents()
         local btn = _G["ARWICUIR_btnSpec" .. i]
         if btn == nil then
             btn = CreateFrame("Button", "ARWICUIR_btnSpec" .. i, PlayerTalentFrame)
-            btn:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPRIGHT", tabXOffset, -(tabYOffset + ((tabSep + tabDim) * i)))
+            btn:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPRIGHT", tabXOffset, -((tabSep + tabDim) * i))
             btn:SetSize(tabDim, tabDim)
             btn:CreateBackdrop("Default") -- ElvUI func
+            btn:SetScript("OnEnter", function(self)
+                GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT")
+                GameTooltip:SetText(specName, 1, 1, 1) -- This sets the top line of text, in gold.
+                GameTooltip:AddLine(specDesc, nil, nil, nil, true)
+                GameTooltip:Show()
+            end)
             if btn.icon == nil then
                 btn.icon = btn:CreateTexture()
                 btn.icon:SetSize(tabDim, tabDim)
