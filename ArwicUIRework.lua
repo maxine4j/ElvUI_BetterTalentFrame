@@ -40,6 +40,20 @@ local function ReworkTalents()
         PlayerTalentFrameSpecializationSpellScrollFrame:SetPoint("CENTER", PlayerTalentFrameSpecialization, "CENTER", 0, 0)
     end
     if PlayerTalentFrameTalents ~= nil then
+        local offsetX = 4
+        local offsetY = -322
+        local buttonWidth = 210
+        local buttonHeight = 42
+        local buttonSepX = 0
+        local buttonSepY = 9
+        for i = 1, 7, 1 do
+            for j = 1, 3, 1 do
+                local t = _G["PlayerTalentFrameTalentsTalentRow" .. i .. "Talent" .. j]
+                t:SetPoint("TOPLEFT", PlayerTalentFrameTalents, "TOPLEFT", 
+                offsetX + ((j - 1) * (buttonWidth + buttonSepX)), offsetY + ((i - 1) * (buttonHeight + buttonSepY)))
+                t:SetSize(buttonWidth, buttonHeight)
+            end
+        end
     end
     if PlayerTalentFramePetSpecialization ~= nil then
         PlayerTalentFramePetSpecializationSpecButton1:ClearAllPoints()
