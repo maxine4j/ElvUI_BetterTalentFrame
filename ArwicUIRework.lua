@@ -26,17 +26,53 @@ local function ReworkProfessions()
 end
 
 local function ReworkTalents()
-    PlayerTalentFrameSpecializationLearnButton:SetParent(PlayerTalentFrame)
-    PlayerTalentFrameSpecializationLearnButton:SetScript("OnClick", function(self, button) 
-        SetSpecialization(selectedSpec)
-    end)
-    PlayerTalentFrameSpecializationLearnButton:Enable()
+    local activateButtonWidth = 200
+    local activateButtonHeight = 20
+
+    if PlayerTalentFrameSpecialization ~= nil then
+        -- remove the spec selection buttons from the left side of the main spec tab
+        for i = 1, GetNumSpecializations(), 1 do
+            local btn = _G["PlayerTalentFrameSpecializationSpecButton" .. i]
+            btn:Hide()
+        end
+         -- center the spec info frame
+        PlayerTalentFrameSpecializationSpellScrollFrame:ClearAllPoints()
+        PlayerTalentFrameSpecializationSpellScrollFrame:SetPoint("CENTER", PlayerTalentFrameSpecialization, "CENTER", 0, 0)
+    end
+    if PlayerTalentFrameTalents ~= nil then
+    end
+    if PlayerTalentFramePetSpecialization ~= nil then
+        PlayerTalentFramePetSpecializationSpecButton1:ClearAllPoints()
+        PlayerTalentFramePetSpecializationSpecButton2:ClearAllPoints()
+        PlayerTalentFramePetSpecializationSpecButton3:ClearAllPoints()
+        PlayerTalentFramePetSpecializationSpecButton1:SetPoint("CENTER", PlayerTalentFramePetSpecialization, "BOTTOMLEFT", 100, 70)
+        PlayerTalentFramePetSpecializationSpecButton2:SetPoint("CENTER", PlayerTalentFramePetSpecialization, "BOTTOM", -8, 70)
+        PlayerTalentFramePetSpecializationSpecButton3:SetPoint("CENTER", PlayerTalentFramePetSpecialization, "BOTTOMRIGHT", -115, 70)
+        PlayerTalentFramePetSpecializationSpellScrollFrame:ClearAllPoints()
+        PlayerTalentFramePetSpecializationSpellScrollFrame:SetPoint("CENTER", PlayerTalentFrameSpecialization, "CENTER", 0, 0)
+    end
+    if PlayerTalentFrameSpecializationLearnButton ~= nil then
+        -- make the activate button appear on every frame
+        PlayerTalentFrameSpecializationLearnButton:SetText("Activate Specialization")
+        PlayerTalentFrameSpecializationLearnButton:SetSize(activateButtonWidth, activateButtonHeight)
+        PlayerTalentFrameSpecializationLearnButton:SetParent(PlayerTalentFrame)
+        PlayerTalentFrameSpecializationLearnButton:SetScript("OnClick", function(self, button) 
+            SetSpecialization(selectedSpec)
+        end)
+        PlayerTalentFrameSpecializationLearnButton:SetEnabled(selectedSpec ~= GetSpecialization())
+    end
+    if PlayerTalentFramePetSpecializationLearnButton ~= nil then
+        -- move the pet activate button as the player activate button will now cover it
+        PlayerTalentFramePetSpecializationLearnButton:SetText("Activate Pet Specialization")
+        PlayerTalentFramePetSpecializationLearnButton:SetSize(activateButtonWidth, activateButtonHeight)
+        PlayerTalentFramePetSpecializationLearnButton:ClearAllPoints()
+        PlayerTalentFramePetSpecializationLearnButton:SetPoint("CENTER", PlayerTalentFrameSpecializationLearnButton, "CENTER", 0, 30)
+    end
 
     local tabDim = 35
     local tabSep = 10
     local tabXOffset = 2
-    local numSpecs = GetNumSpecializations()
-    for i = 1, numSpecs, 1 do
+    for i = 1, GetNumSpecializations(), 1 do
         local specID, specName, specDesc, specIcon, specRole, specPriStat = GetSpecializationInfo(i)
         local btn = _G["ARWICUIR_btnSpec" .. i]
         if btn == nil then
@@ -83,15 +119,12 @@ local function ReworkTalents()
     end
 end
 
-function ReworkAll()
-    ReworkSpellBook()
-    ReworkProfessions()
-end
-
 function Init()
     hooksecurefunc("ToggleTalentFrame", ReworkTalents)
-
-    ReworkAll()
+    
+    ReworkSpellBook()
+    ReworkProfessions()
+    
     print(outputPrefix .. "Loaded")
 end
 
