@@ -83,7 +83,7 @@ local function ReworkTalents()
         PlayerTalentFramePetSpecializationLearnButton:SetPoint("CENTER", PlayerTalentFrameSpecializationLearnButton, "CENTER", 0, 30)
     end
 
-    local tabDim = 35
+    local tabDim = 30
     local tabSep = 10
     local tabXOffset = 2
     for i = 1, GetNumSpecializations(), 1 do
