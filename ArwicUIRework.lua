@@ -1,5 +1,5 @@
-local outputPrefix = "ArwicUIRework: "
-local selectedSpec = GetSpecialization()
+local outputPrefix
+local selectedSpec
 
 local function ReworkSpellBook()
     -- vars
@@ -26,6 +26,9 @@ local function ReworkProfessions()
 end
 
 local function ReworkTalents()
+    if selectedSpec == nil then
+        selectedSpec = GetSpecialization()
+    end
     local activateButtonWidth = 200
     local activateButtonHeight = 20
 
@@ -134,6 +137,9 @@ local function ReworkTalents()
 end
 
 function Init()
+    outputPrefix = "ArwicUIRework: "
+    selectedSpec = GetSpecialization()
+
     hooksecurefunc("ToggleTalentFrame", ReworkTalents)
     
     ReworkSpellBook()
