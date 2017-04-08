@@ -1,7 +1,7 @@
 local outputPrefix = "ArwicUIRework: "
 local selectedSpec = GetSpecialization()
 
-local function Apply_SpellBook()
+local function ReworkSpellBook()
     -- vars
     local horiMargin = 30
     local vertMargin = 40
@@ -17,7 +17,7 @@ local function Apply_SpellBook()
     SpellBookFrame:SetSize(frameWidth, frameHeight)
 end
 
-local function Apply_Professions()
+local function ReworkProfessions()
     -- vars
     local horiMargin = 15
     local vertMargin = 40
@@ -25,15 +25,12 @@ local function Apply_Professions()
     PrimaryProfession1:SetPoint("TOPLEFT", horiMargin, -vertMargin)
 end
 
-local function Apply_Talents()
-    --PlayerTalentFrameSpecializationLearnButton
-
-    local btnActivate = PlayerTalentFrameSpecializationLearnButton
-    btnActivate:SetParent(PlayerTalentFrame)
-    btnActivate:SetScript("OnClick", function(self, button) 
-        SetSpecialization(selectedTalentSpec)
+local function ReworkTalents()
+    PlayerTalentFrameSpecializationLearnButton:SetParent(PlayerTalentFrame)
+    PlayerTalentFrameSpecializationLearnButton:SetScript("OnClick", function(self, button) 
+        SetSpecialization(selectedSpec)
     end)
-    btnActivate:Enable()
+    PlayerTalentFrameSpecializationLearnButton:Enable()
 
     local tabDim = 35
     local tabSep = 10
@@ -45,24 +42,49 @@ local function Apply_Talents()
         local btn = _G["ARWICUIR_btnSpec" .. i]
         if btn == nil then
             btn = CreateFrame("Button", "ARWICUIR_btnSpec" .. i, PlayerTalentFrame)
+            btn:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPRIGHT", tabXOffset, -(tabYOffset + ((tabSep + tabDim) * i)))
+            btn:SetSize(tabDim, tabDim)
+            btn:CreateBackdrop("Default") -- ElvUI func
+            if btn.icon == nil then
+                btn.icon = btn:CreateTexture()
+                btn.icon:SetSize(tabDim, tabDim)
+                btn.icon:SetPoint("TOPLEFT")
+                btn.icon:SetTexture(specIcon)
+                btn.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+            end
+            btn.icon:SetShown(true)
+            if btn.overlay == nil then
+                btn.overlay = btn:CreateTexture()
+                btn.overlay:SetSize(tabDim, tabDim)
+                btn.overlay:SetPoint("TOPLEFT")
+                btn.overlay:SetColorTexture(1.0, 1.0, 1.0, 0.51) -- Needs to be over 0.5?
+                btn:SetScript("OnClick", function(self, button)
+                    -- update the overlay
+                    local btnOld = _G["ARWICUIR_btnSpec" .. selectedSpec]
+                    local btnNew = _G["ARWICUIR_btnSpec" .. i]
+                    btnOld.overlay:SetShown(false)
+                    btnNew.overlay:SetShown(true)
+                    -- remember which tab is selected
+                    selectedSpec = i
+                    -- update the activate button
+                    PlayerTalentFrameSpecializationLearnButton:SetEnabled(selectedSpec ~= GetSpecialization())
+                end)
+            end
+            btn.overlay:SetShown(selectedSpec == i)
         end
-        btn:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPRIGHT", tabXOffset, -(tabYOffset + ((tabSep + tabDim) * i)))
-        btn:SetSize(tabDim, tabDim)
-        btn:CreateBackdrop("asasd", true)
-        btn:SetBackdrop("Interface\\Icons\\" .. specIcon)
-        btn:Show()
-        btn:SetScript("OnClick", function(self, button)
-            selectedTalentSpec = i
-        end)
     end
 end
 
-function ApplyAll()
-    Apply_SpellBook()
-    Apply_Professions()
-    Apply_Talents()
+function ReworkAll()
+    ReworkSpellBook()
+    ReworkProfessions()
 end
 
-ApplyAll()
+function Init()
+    hooksecurefunc("ToggleTalentFrame", ReworkTalents)
 
-print(outputPrefix .. "Loaded")
+    ReworkAll()
+    print(outputPrefix .. "Loaded")
+end
+
+Init()
