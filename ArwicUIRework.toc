@@ -1,0 +1,8 @@
+## Interface: 70200
+## Title: Arwic UI Rework
+## Version: v0.0.1
+## Author: Arwic-Frostmourne
+## Notes: Reworks some of the default Blizzard frames
+## SavedVariables: ArwicUIReworkDB
+
+ArwicUIRework.lua
