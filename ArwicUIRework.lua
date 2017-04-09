@@ -44,7 +44,7 @@ local function ReworkTalents()
     end
     if PlayerTalentFrameTalents ~= nil then
         local offsetX = 4
-        local offsetY = -322
+        local offsetY = 16
         local buttonWidth = 210
         local buttonHeight = 42
         local buttonSepX = 0
@@ -53,7 +53,7 @@ local function ReworkTalents()
             for j = 1, 3, 1 do
                 local t = _G["PlayerTalentFrameTalentsTalentRow" .. i .. "Talent" .. j]
                 t:SetPoint("TOPLEFT", PlayerTalentFrameTalents, "TOPLEFT", 
-                offsetX + ((j - 1) * (buttonWidth + buttonSepX)), offsetY + ((i - 1) * (buttonHeight + buttonSepY)))
+                offsetX + ((j - 1) * (buttonWidth + buttonSepX)), -(offsetY + ((i - 1) * (buttonHeight + buttonSepY))))
                 t:SetSize(buttonWidth, buttonHeight)
             end
         end
