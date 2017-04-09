@@ -1,3 +1,8 @@
+--[[
+    Arwic UI Rework - Copyright (C) Arwic-Frostmourne
+    ArwicUIRework.lua
+]]--
+
 local outputPrefix
 local selectedSpec
 local eventFrame
