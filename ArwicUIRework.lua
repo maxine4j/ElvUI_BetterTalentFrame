@@ -125,9 +125,9 @@ local function ReworkTalents()
         for j = 1, 3, 1 do
             -- get vars
             local talentButton = _G["PlayerTalentFrameTalentsTalentRow" .. i .. "Talent" .. j]
+            local talentInfo = ArwicUIReworkDB["talents"][selectedSpec][i][j]
+            local talentButtonIconTexture = _G["PlayerTalentFrameTalentsTalentRow" .. i .. "Talent" .. j .. "IconTexture"]
             if selectedSpec ~= GetSpecialization() then
-                local talentInfo = ArwicUIReworkDB["talents"][selectedSpec][i][j]
-                local talentButtonIconTexture = _G["PlayerTalentFrameTalentsTalentRow" .. i .. "Talent" .. j .. "IconTexture"]
                 -- local talentID, name, texture, selected, available, spellid, tier, column
                 -- update the talent buttons
                 talentButton.name:SetText(talentInfo.name)
@@ -156,6 +156,14 @@ local function ReworkTalents()
                 talentButton:SetScript("OnClick", function(...) end)
             else
                 talentButton:SetScript("OnClick", PlayerTalentButton_OnClick)
+                talentButton:SetScript("OnEnter", function(self)
+                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                    GameTooltip:SetTalent(talentInfo.talentID)
+                    GameTooltip:Show()
+                end)
+                talentButton:SetScript("OnLeave", function(self)
+                    GameTooltip_Hide()
+                end)
             end
         end
     end
