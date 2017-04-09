@@ -106,6 +106,18 @@ local function ReworkTalents()
             btn:SetScript("OnLeave", function(self)
                 GameTooltip:Hide()
             end)
+            btn:SetScript("OnClick", function(self, button)
+                -- update the overlay
+                local btnOld = _G["ARWICUIR_btnSpec" .. selectedSpec]
+                local btnNew = _G["ARWICUIR_btnSpec" .. i]
+                btnOld.overlay:SetShown(false)
+                btnNew.overlay:SetShown(true)
+                -- remember which tab is selected
+                selectedSpec = i
+                -- update the activate button
+                PlayerTalentFrameSpecializationLearnButton:SetEnabled(selectedSpec ~= GetSpecialization())
+                PlayerTalentFrame_Refresh()
+            end)
             if btn.icon == nil then
                 btn.icon = btn:CreateTexture()
                 btn.icon:SetSize(tabDim, tabDim)
@@ -119,17 +131,6 @@ local function ReworkTalents()
                 btn.overlay:SetSize(tabDim, tabDim)
                 btn.overlay:SetPoint("TOPLEFT")
                 btn.overlay:SetColorTexture(1.0, 1.0, 1.0, 0.51) -- Needs to be over 0.5?
-                btn:SetScript("OnClick", function(self, button)
-                    -- update the overlay
-                    local btnOld = _G["ARWICUIR_btnSpec" .. selectedSpec]
-                    local btnNew = _G["ARWICUIR_btnSpec" .. i]
-                    btnOld.overlay:SetShown(false)
-                    btnNew.overlay:SetShown(true)
-                    -- remember which tab is selected
-                    selectedSpec = i
-                    -- update the activate button
-                    PlayerTalentFrameSpecializationLearnButton:SetEnabled(selectedSpec ~= GetSpecialization())
-                end)
             end
             btn.overlay:SetShown(selectedSpec == i)
         end
