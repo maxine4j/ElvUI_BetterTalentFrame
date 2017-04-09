@@ -203,7 +203,10 @@ local function ReworkTalents()
                 selectedSpec = i
                 -- update the activate button
                 PlayerTalentFrameSpecializationLearnButton:SetEnabled(selectedSpec ~= GetSpecialization())
+                -- refresh the talent frame
                 ReworkTalents()
+                -- update the spec tab
+                PlayerTalentFrame_UpdateSpecFrame(PlayerTalentFrameSpecialization, selectedSpec)
             end)
             -- give it an icon
             if btn.icon == nil then
