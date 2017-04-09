@@ -127,7 +127,7 @@ local function ReworkTalents()
             end
             btn.icon:SetShown(true)
             if btn.overlay == nil then
-                btn.overlay = btn:CreateTexture()
+                btn.overlay = btn:CreateTexture(nil, "OVERLAY")
                 btn.overlay:SetSize(tabDim, tabDim)
                 btn.overlay:SetPoint("TOPLEFT")
                 btn.overlay:SetColorTexture(1.0, 1.0, 1.0, 0.51) -- Needs to be over 0.5?
