@@ -3,6 +3,6 @@
 ## Version: v0.0.1
 ## Author: Arwic-Frostmourne
 ## Notes: Reworks some of the default Blizzard frames
-## SavedVariables: ArwicUIReworkDB
+## SavedVariablesPerCharacter: ArwicUIReworkDB
 
 ArwicUIRework.lua
