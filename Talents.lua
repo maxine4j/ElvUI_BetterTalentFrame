@@ -12,12 +12,12 @@ local events = {}
 
 -- returns the pve talent info for a given spec at the given row and column
 local function GetCache_PveTalent(specIndex, row, col)
-    return ArwicUIReworkDB["talents"]["pve"][selectedSpec][row][col]
+    return ArwicUIReworkDB["talents"]["pve"][specIndex][row][col]
 end
 
 -- returns the pvp talent info for a given spec at the given row and column
 local function GetCache_PvpTalent(specIndex, row, col)
-    return ArwicUIReworkDB["talents"]["pvp"][selectedSpec][row][col]
+    return ArwicUIReworkDB["talents"]["pvp"][specIndex][row][col]
 end
 
 -- returns the given talent button
@@ -28,6 +28,16 @@ end
 -- returns the texture widget of the given talent button
 local function GetFrame_TalentButtonIconTexture(row, col)
     return _G["PlayerTalentFrameTalentsTalentRow" .. row .. "Talent" .. col .. "IconTexture"]
+end
+
+-- returns the given talent button
+local function GetFrame_PvpTalentButton(row, col)
+    return PlayerTalentFramePVPTalents.Talents["Tier" .. row]["Talent" .. col]
+end
+
+-- returns the texture widget of the given talent button
+local function GetFrame_PvpTalentButtonIconTexture(row, col)
+    return GetFrame_PvpTalentButton(row, col).Icon
 end
 
 -- caches the current specs talent configuration
@@ -43,7 +53,7 @@ local function UpdateTalentCache()
 
     -- cache talent infos
     local curSpec = ArwicUIReworkDB["talents"]["pve"][GetSpecialization()]
-    for i = 1, GetMaxTalentTier(), 1 do
+    for i = 1, 7, 1 do
         curSpec[i] = {}
         for j = 1, 3, 1 do
             curSpec[i][j] = {}
@@ -70,7 +80,7 @@ local function UpdateTalentCache()
             curPvpSpec[i][j].available, 
             curPvpSpec[i][j].spellid, 
             curPvpSpec[i][j].tier, 
-            curPvpSpec[i][j].column = GetTalentInfo(i, j, GetActiveSpecGroup())
+            curPvpSpec[i][j].column = GetPvpTalentInfo(i, j, GetActiveSpecGroup())
         end
     end
 end
@@ -92,6 +102,7 @@ local function UpdateTab_Specialization()
 end
 
 local function UpdateTab_Talents()
+    UpdateTalentCache()
     -- replace the current talent buttons with the selected specs talents
     for i = 1, 7, 1 do
         for j = 1, 3, 1 do
@@ -133,7 +144,45 @@ local function UpdateTab_Talents()
 end
 
 local function UpdateTab_HonorTalents()
-    -- NYI
+    UpdateTalentCache()
+    -- replace the current talent buttons with the selected specs talents
+    for i = 1, 6, 1 do
+        for j = 1, 3, 1 do
+            -- get vars
+            local btn = GetFrame_PvpTalentButton(i, j)
+            local talentInfo = GetCache_PvpTalent(selectedSpec, i, j)
+            local btnTexture = GetFrame_PvpTalentButtonIconTexture(i, j)
+            
+            -- update the talent buttons
+            btn.Name:SetText(talentInfo.name)
+            btn.Icon:SetTexture(talentInfo.texture)
+            -- select the correct buttons
+            btnTexture:SetDesaturated(not talentInfo.selected)
+            -- setup tooltip
+            btn:SetScript("OnEnter", function(self)
+                GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                GameTooltip:SetPvpTalent(talentInfo.talentID)
+                GameTooltip:Show()
+            end)
+            btn:SetScript("OnLeave", function(self)
+                GameTooltip_Hide()
+            end)
+
+            if selectedSpec == GetSpecialization() then
+                -- enable the buttons click event as this is the currently active spec
+                btn:SetScript("OnClick", PlayerPVPTalentButton_OnClick)
+                -- active specs have green highlighs
+                btn.bg.SelectedTexture:SetColorTexture(23/255, 49/255, 23/255, 1.0)
+                btn.bg.SelectedTexture:SetShown(talentInfo.selected)
+            else
+                -- disable the buttons click event as this is not the currently active spec
+                btn:SetScript("OnClick", function(...) end)
+                -- non active specs have grey highlighs
+                btn.bg.SelectedTexture:SetColorTexture(55/255, 55/255, 55/255, 1.0)
+                btn.bg.SelectedTexture:SetShown(talentInfo.selected)
+            end
+        end
+    end
 end
 
 local function UpdateTab_Pet()
@@ -245,8 +294,6 @@ local function InitTab_Talents()
 end
 
 local function InitTab_HonorTalents()
-    -- NYI
-
     UpdateTab_HonorTalents()
 end
 
@@ -319,11 +366,12 @@ function AUIR_Talents_Init()
     end
 
     -- hook functions
-    local shouldHook_PlayerTalentFrame_Update = true
+    local shouldHook = true
     hooksecurefunc("PanelTemplates_SetTab", function()
-        if shouldHook_PlayerTalentFrame_Update then
-            hooksecurefunc("PlayerTalentFrame_Update", UpdateAll)
-            shouldHook_PlayerTalentFrame_Update = false
+        if shouldHook then
+            hooksecurefunc("PVPTalentFrame_Update", UpdateTab_HonorTalents) -- FIXME: these hooks cause laggy talent selection
+            hooksecurefunc("PlayerTalentFrame_Update", UpdateTab_Talents) -- FIXME: these hooks cause laggy talent selection
+            shouldHook = false
         end
     end)
 end
