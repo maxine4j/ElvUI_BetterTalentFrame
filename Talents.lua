@@ -115,7 +115,7 @@ local function UpdateTab_Talents()
             btn.name:SetText(talentInfo.name)
             btn.icon:SetTexture(talentInfo.texture)
             -- select the correct buttons
-            btnTexture:SetDesaturated(not talentInfo.selected)
+            btnTexture:SetDesaturated(not (talentInfo.selected and selectedSpec == GetSpecialization()))
             -- setup tooltip
             btn:SetScript("OnEnter", function(self)
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
@@ -157,7 +157,7 @@ local function UpdateTab_HonorTalents()
             btn.Name:SetText(talentInfo.name)
             btn.Icon:SetTexture(talentInfo.texture)
             -- select the correct buttons
-            btnTexture:SetDesaturated(not talentInfo.selected)
+            btnTexture:SetDesaturated(not (talentInfo.selected and selectedSpec == GetSpecialization()))
             -- setup tooltip
             btn:SetScript("OnEnter", function(self)
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
@@ -186,7 +186,6 @@ local function UpdateTab_HonorTalents()
 end
 
 local function UpdateTab_Pet()
-    -- NYI
 end
 
 function UpdateAll()
