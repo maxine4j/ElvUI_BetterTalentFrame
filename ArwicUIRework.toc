@@ -4,5 +4,16 @@
 ## Author: Arwic-Frostmourne
 ## Notes: Reworks some of the default Blizzard frames
 ## SavedVariablesPerCharacter: ArwicUIReworkDB
+## SavedVariables: ArwicUIReworkGlobalDB
+## Dependencies: ElvUI
 
-ArwicUIRework.lua
+Core.lua
+Character.lua
+SpellBook.lua
+Talents.lua
+Achievements.lua
+QuestLog.lua
+GuildRoster.lua
+GroupFinder.lua
+AdventureGuide.lua
+Collections.lua
