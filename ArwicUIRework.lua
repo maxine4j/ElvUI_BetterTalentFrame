@@ -35,23 +35,41 @@ local function CacheTalents()
     -- only create these if they dont exists
     if ArwicUIReworkDB == nil then ArwicUIReworkDB = {} end
     if ArwicUIReworkDB["talents"] == nil then ArwicUIReworkDB["talents"] = {} end
+    if ArwicUIReworkDB["talents_pvp"] == nil then ArwicUIReworkDB["talents_pvp"] = {} end
     -- always recreate this
     ArwicUIReworkDB["talents"][GetSpecialization()] = {}
+    ArwicUIReworkDB["talents_pvp"][GetSpecialization()] = {}
+
+    -- cache talent infos
     local curSpec = ArwicUIReworkDB["talents"][GetSpecialization()]
-    -- save talent infos to file
     for i = 1, GetMaxTalentTier(), 1 do
         curSpec[i] = {}
         for j = 1, 3, 1 do
             curSpec[i][j] = {}
-            local talentID, name, texture, selected, available, spellid, tier, column = GetTalentInfo(i, j, GetActiveSpecGroup())
-            curSpec[i][j].talentID = talentID
-            curSpec[i][j].name = name
-            curSpec[i][j].texture = texture
-            curSpec[i][j].selected = selected
-            curSpec[i][j].available = available
-            curSpec[i][j].spellid = spellid
-            curSpec[i][j].tier = tier
-            curSpec[i][j].column = column
+            curSpec[i][j].talentID, 
+            curSpec[i][j].name, 
+            curSpec[i][j].texture, 
+            curSpec[i][j].selected, 
+            curSpec[i][j].available, 
+            curSpec[i][j].spellid, 
+            curSpec[i][j].tier, 
+            curSpec[i][j].column = GetTalentInfo(i, j, GetActiveSpecGroup())
+        end
+    end
+    -- cache honor talent infos
+    local curPvpSpec = ArwicUIReworkDB["talents_pvp"][GetSpecialization()]
+    for i = 1, 6, 1 do
+        curPvpSpec[i] = {}
+        for j = 1, 3, 1 do
+            curPvpSpec[i][j] = {}
+            curPvpSpec[i][j].talentID, 
+            curPvpSpec[i][j].name, 
+            curPvpSpec[i][j].texture, 
+            curPvpSpec[i][j].selected, 
+            curPvpSpec[i][j].available, 
+            curPvpSpec[i][j].spellid, 
+            curPvpSpec[i][j].tier, 
+            curPvpSpec[i][j].column = GetTalentInfo(i, j, GetActiveSpecGroup())
         end
     end
 end
