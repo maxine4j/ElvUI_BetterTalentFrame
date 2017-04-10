@@ -369,8 +369,8 @@ function AUIR_Talents_Init()
     local shouldHook = true
     hooksecurefunc("PanelTemplates_SetTab", function()
         if shouldHook then
-            hooksecurefunc("PVPTalentFrame_Update", UpdateTab_HonorTalents) -- FIXME: these hooks cause laggy talent selection
-            hooksecurefunc("PlayerTalentFrame_Update", UpdateTab_Talents) -- FIXME: these hooks cause laggy talent selection
+            hooksecurefunc("PVPTalentFrame_Update", UpdateAll)
+            hooksecurefunc("PlayerTalentFrame_Update", UpdateAll)
             shouldHook = false
         end
     end)
