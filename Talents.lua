@@ -12,11 +12,17 @@ local events = {}
 
 -- returns the pve talent info for a given spec at the given row and column
 local function GetCache_PveTalent(specIndex, row, col)
+    if ArwicUIReworkDB["talents"]["pve"][specIndex] == nil then
+        return nil
+    end
     return ArwicUIReworkDB["talents"]["pve"][specIndex][row][col]
 end
 
 -- returns the pvp talent info for a given spec at the given row and column
 local function GetCache_PvpTalent(specIndex, row, col)
+    if ArwicUIReworkDB["talents"]["pvp"][specIndex] == nil then
+        return nil
+    end
     return ArwicUIReworkDB["talents"]["pvp"][specIndex][row][col]
 end
 
@@ -110,34 +116,50 @@ local function UpdateTab_Talents()
             local btn = GetFrame_TalentButton(i, j)
             local talentInfo = GetCache_PveTalent(selectedSpec, i, j)
             local btnTexture = GetFrame_TalentButtonIconTexture(i, j)
+            
+            if talentInfo ~= nil then
+                -- update the talent buttons
+                btn.name:SetText(talentInfo.name)
+                btn.icon:SetTexture(talentInfo.texture)
+                -- select the correct buttons
+                btnTexture:SetDesaturated(not (talentInfo.selected and selectedSpec == GetSpecialization()))
+                -- setup tooltip
+                btn:SetScript("OnEnter", function(self)
+                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                    GameTooltip:SetTalent(talentInfo.talentID)
+                    GameTooltip:Show()
+                end)
+                btn:SetScript("OnLeave", function(self)
+                    GameTooltip_Hide()
+                end)
 
-            -- update the talent buttons
-            btn.name:SetText(talentInfo.name)
-            btn.icon:SetTexture(talentInfo.texture)
-            -- select the correct buttons
-            btnTexture:SetDesaturated(not (talentInfo.selected and selectedSpec == GetSpecialization()))
-            -- setup tooltip
-            btn:SetScript("OnEnter", function(self)
-                GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-                GameTooltip:SetTalent(talentInfo.talentID)
-                GameTooltip:Show()
-            end)
-            btn:SetScript("OnLeave", function(self)
-                GameTooltip_Hide()
-            end)
-
-            if selectedSpec == GetSpecialization() then
-                -- enable the buttons click event as this is the currently active spec
-                btn:SetScript("OnClick", PlayerTalentButton_OnClick)
-                -- active specs have green highlighs
-                btn.bg.SelectedTexture:SetColorTexture(23/255, 49/255, 23/255, 1.0)
-                btn.bg.SelectedTexture:SetShown(talentInfo.selected)
+                if selectedSpec == GetSpecialization() then
+                    -- enable the buttons click event as this is the currently active spec
+                    btn:SetScript("OnClick", PlayerTalentButton_OnClick)
+                    -- active specs have green highlighs
+                    btn.bg.SelectedTexture:SetColorTexture(23/255, 49/255, 23/255, 1.0)
+                    btn.bg.SelectedTexture:SetShown(talentInfo.selected)
+                else
+                    -- disable the buttons click event as this is not the currently active spec
+                    btn:SetScript("OnClick", function(...) end)
+                    -- non active specs have grey highlighs
+                    btn.bg.SelectedTexture:SetColorTexture(55/255, 55/255, 55/255, 1.0)
+                    btn.bg.SelectedTexture:SetShown(talentInfo.selected)
+                end
             else
-                -- disable the buttons click event as this is not the currently active spec
-                btn:SetScript("OnClick", function(...) end)
-                -- non active specs have grey highlighs
-                btn.bg.SelectedTexture:SetColorTexture(55/255, 55/255, 55/255, 1.0)
-                btn.bg.SelectedTexture:SetShown(talentInfo.selected)
+                -- Unknown message
+                btn.name:SetText("Unknown Talent")
+                btn.icon:SetTexture(0)
+                btn.bg.SelectedTexture:SetShown(false)
+                btn:SetScript("OnEnter", function(self)
+                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                    GameTooltip:SetText("Unknown Talent", 1, 0, 0)
+                    GameTooltip:AddLine("Activate this specialization to update this talent.", nil, nil, nil, true)
+                    GameTooltip:Show()
+                end)
+                btn:SetScript("OnLeave", function(self)
+                    GameTooltip_Hide()
+                end)
             end
         end
     end
@@ -152,34 +174,50 @@ local function UpdateTab_HonorTalents()
             local btn = GetFrame_PvpTalentButton(i, j)
             local talentInfo = GetCache_PvpTalent(selectedSpec, i, j)
             local btnTexture = GetFrame_PvpTalentButtonIconTexture(i, j)
-            
-            -- update the talent buttons
-            btn.Name:SetText(talentInfo.name)
-            btn.Icon:SetTexture(talentInfo.texture)
-            -- select the correct buttons
-            btnTexture:SetDesaturated(not (talentInfo.selected and selectedSpec == GetSpecialization()))
-            -- setup tooltip
-            btn:SetScript("OnEnter", function(self)
-                GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-                GameTooltip:SetPvpTalent(talentInfo.talentID)
-                GameTooltip:Show()
-            end)
-            btn:SetScript("OnLeave", function(self)
-                GameTooltip_Hide()
-            end)
 
-            if selectedSpec == GetSpecialization() then
-                -- enable the buttons click event as this is the currently active spec
-                btn:SetScript("OnClick", PlayerPVPTalentButton_OnClick)
-                -- active specs have green highlighs
-                btn.bg.SelectedTexture:SetColorTexture(23/255, 49/255, 23/255, 1.0)
-                btn.bg.SelectedTexture:SetShown(talentInfo.selected)
+            if talentInfo ~= nil then
+                -- update the talent buttons
+                btn.Name:SetText(talentInfo.name)
+                btn.Icon:SetTexture(talentInfo.texture)
+                -- select the correct buttons
+                btnTexture:SetDesaturated(not (talentInfo.selected and selectedSpec == GetSpecialization()))
+                -- setup tooltip
+                btn:SetScript("OnEnter", function(self)
+                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                    GameTooltip:SetPvpTalent(talentInfo.talentID)
+                    GameTooltip:Show()
+                end)
+                btn:SetScript("OnLeave", function(self)
+                    GameTooltip_Hide()
+                end)
+
+                if selectedSpec == GetSpecialization() then
+                    -- enable the buttons click event as this is the currently active spec
+                    btn:SetScript("OnClick", PlayerPVPTalentButton_OnClick)
+                    -- active specs have green highlighs
+                    btn.bg.SelectedTexture:SetColorTexture(23/255, 49/255, 23/255, 1.0)
+                    btn.bg.SelectedTexture:SetShown(talentInfo.selected)
+                else
+                    -- disable the buttons click event as this is not the currently active spec
+                    btn:SetScript("OnClick", function(...) end)
+                    -- non active specs have grey highlighs
+                    btn.bg.SelectedTexture:SetColorTexture(55/255, 55/255, 55/255, 1.0)
+                    btn.bg.SelectedTexture:SetShown(talentInfo.selected)
+                end
             else
-                -- disable the buttons click event as this is not the currently active spec
-                btn:SetScript("OnClick", function(...) end)
-                -- non active specs have grey highlighs
-                btn.bg.SelectedTexture:SetColorTexture(55/255, 55/255, 55/255, 1.0)
-                btn.bg.SelectedTexture:SetShown(talentInfo.selected)
+                -- Unknown message
+                btn.Name:SetText("Unknown Talent")
+                btn.Icon:SetTexture(0)
+                btn.bg.SelectedTexture:SetShown(false)
+                btn:SetScript("OnEnter", function(self)
+                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                    GameTooltip:SetText("Unknown Talent", 1, 0, 0)
+                    GameTooltip:AddLine("Activate this specialization to update this talent.", nil, nil, nil, true)
+                    GameTooltip:Show()
+                end)
+                btn:SetScript("OnLeave", function(self)
+                    GameTooltip_Hide()
+                end)
             end
         end
     end
