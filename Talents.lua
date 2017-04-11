@@ -5,7 +5,7 @@
 ---------- VARS ----------
 
 -- the currently selected spec
-local selectedSpec = GetSpecialization()
+local selectedSpec = 1
 local events = {}
 
 ---------- HELPERS ----------
@@ -368,9 +368,8 @@ end
 
 function events:PLAYER_LOGIN(...)
     UpdateTalentCache()
-
+    selectedSpec = GetSpecialization()
     ToggleTalentFrame() -- initialize the default talent frame
-
     Init_Global()
     InitTab_Specialization()
     InitTab_Talents()
