@@ -375,6 +375,8 @@ function events:PLAYER_LOGIN(...)
     InitTab_Talents()
     InitTab_HonorTalents()
     InitTab_Pet()
+    hooksecurefunc("PlayerTalentFrame_Update", UpdateAll)
+    hooksecurefunc("PVPTalentFrame_Update", UpdateAll)
 end
 
 function events:PLAYER_LOGOUT(...)
@@ -400,16 +402,6 @@ function AUIR_Talents_Init()
     for k, v in pairs(events) do
         eventFrame:RegisterEvent(k)
     end
-
-    -- hook functions
-    local shouldHook = true
-    hooksecurefunc("PanelTemplates_SetTab", function()
-        if shouldHook then
-            hooksecurefunc("PVPTalentFrame_Update", UpdateAll)
-            hooksecurefunc("PlayerTalentFrame_Update", UpdateAll)
-            shouldHook = false
-        end
-    end)
 end
 
 AUIR_Talents_Init()
