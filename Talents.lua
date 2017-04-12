@@ -5,7 +5,7 @@
 ---------- VARS ----------
 
 -- the currently selected spec
-local selectedSpec = 1
+ARWICUIR_selectedSpec = 1
 local events = {}
 
 ---------- HELPERS ----------
@@ -94,17 +94,17 @@ end
 ---------- UPDATE ----------
 
 local function Update_Global()
-    PlayerTalentFrameSpecializationLearnButton:SetEnabled(selectedSpec ~= GetSpecialization())
+    PlayerTalentFrameSpecializationLearnButton:SetEnabled(ARWICUIR_selectedSpec ~= GetSpecialization())
     
     for i = 1, GetNumSpecializations(), 1 do
         if _G["AUIR_SpecTab" .. i] and _G["AUIR_SpecTab" .. i].overlay then
-            _G["AUIR_SpecTab" .. i].overlay:SetShown(selectedSpec == i)
+            _G["AUIR_SpecTab" .. i].overlay:SetShown(ARWICUIR_selectedSpec == i)
         end
     end
 end
 
 local function UpdateTab_Specialization()
-    PlayerTalentFrame_UpdateSpecFrame(PlayerTalentFrameSpecialization, selectedSpec)
+    PlayerTalentFrame_UpdateSpecFrame(PlayerTalentFrameSpecialization, ARWICUIR_selectedSpec)
 end
 
 local function UpdateTab_Talents()
@@ -114,7 +114,7 @@ local function UpdateTab_Talents()
         for j = 1, 3, 1 do
             -- get vars
             local btn = GetFrame_TalentButton(i, j)
-            local talentInfo = GetCache_PveTalent(selectedSpec, i, j)
+            local talentInfo = GetCache_PveTalent(ARWICUIR_selectedSpec, i, j)
             local btnTexture = GetFrame_TalentButtonIconTexture(i, j)
             
             if talentInfo ~= nil then
@@ -122,7 +122,7 @@ local function UpdateTab_Talents()
                 btn.name:SetText(talentInfo.name)
                 btn.icon:SetTexture(talentInfo.texture)
                 -- select the correct buttons
-                btnTexture:SetDesaturated(not (talentInfo.selected and selectedSpec == GetSpecialization()))
+                btnTexture:SetDesaturated(not (talentInfo.selected and ARWICUIR_selectedSpec == GetSpecialization()))
                 -- setup tooltip
                 btn:SetScript("OnEnter", function(self)
                     GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
@@ -133,7 +133,7 @@ local function UpdateTab_Talents()
                     GameTooltip_Hide()
                 end)
 
-                if selectedSpec == GetSpecialization() then
+                if ARWICUIR_selectedSpec == GetSpecialization() then
                     -- enable the buttons click event as this is the currently active spec
                     btn:SetScript("OnClick", PlayerTalentButton_OnClick)
                     -- active specs have green highlighs
@@ -172,7 +172,7 @@ local function UpdateTab_HonorTalents()
         for j = 1, 3, 1 do
             -- get vars
             local btn = GetFrame_PvpTalentButton(i, j)
-            local talentInfo = GetCache_PvpTalent(selectedSpec, i, j)
+            local talentInfo = GetCache_PvpTalent(ARWICUIR_selectedSpec, i, j)
             local btnTexture = GetFrame_PvpTalentButtonIconTexture(i, j)
 
             if talentInfo ~= nil then
@@ -180,7 +180,7 @@ local function UpdateTab_HonorTalents()
                 btn.Name:SetText(talentInfo.name)
                 btn.Icon:SetTexture(talentInfo.texture)
                 -- select the correct buttons
-                btnTexture:SetDesaturated(not (talentInfo.selected and selectedSpec == GetSpecialization()))
+                btnTexture:SetDesaturated(not (talentInfo.selected and ARWICUIR_selectedSpec == GetSpecialization()))
                 -- setup tooltip
                 btn:SetScript("OnEnter", function(self)
                     GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
@@ -191,7 +191,7 @@ local function UpdateTab_HonorTalents()
                     GameTooltip_Hide()
                 end)
 
-                if selectedSpec == GetSpecialization() then
+                if ARWICUIR_selectedSpec == GetSpecialization() then
                     -- enable the buttons click event as this is the currently active spec
                     btn:SetScript("OnClick", PlayerPVPTalentButton_OnClick)
                     -- active specs have green highlighs
@@ -245,9 +245,9 @@ local function Init_Global()
         PlayerTalentFrameSpecializationLearnButton:SetSize(activateButtonWidth, activateButtonHeight)
         PlayerTalentFrameSpecializationLearnButton:SetParent(PlayerTalentFrame)
         PlayerTalentFrameSpecializationLearnButton:SetScript("OnClick", function(self, button) 
-            SetSpecialization(selectedSpec)
+            SetSpecialization(ARWICUIR_selectedSpec)
         end)
-        PlayerTalentFrameSpecializationLearnButton:SetEnabled(selectedSpec ~= GetSpecialization())
+        PlayerTalentFrameSpecializationLearnButton:SetEnabled(ARWICUIR_selectedSpec ~= GetSpecialization())
     end
 
     -- add new spec spellbook tabs to the top right of the talent frame
@@ -273,7 +273,7 @@ local function Init_Global()
         end)
         -- set a click action
         btn:SetScript("OnClick", function(self, button)
-            selectedSpec = i
+            ARWICUIR_selectedSpec = i
             UpdateAll()
         end)
         -- give it an icon
@@ -292,7 +292,7 @@ local function Init_Global()
             btn.overlay:SetPoint("TOPLEFT")
             btn.overlay:SetColorTexture(1.0, 1.0, 1.0, 0.51) -- Needs to be over 0.5?
         end
-        btn.overlay:SetShown(selectedSpec == i)
+        btn.overlay:SetShown(ARWICUIR_selectedSpec == i)
     end
 
     Update_Global()
@@ -368,7 +368,7 @@ end
 
 function events:PLAYER_LOGIN(...)
     UpdateTalentCache()
-    selectedSpec = GetSpecialization()
+    ARWICUIR_selectedSpec = GetSpecialization()
     ToggleTalentFrame() -- initialize the default talent frame
     Init_Global()
     InitTab_Specialization()
