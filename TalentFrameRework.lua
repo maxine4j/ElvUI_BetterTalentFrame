@@ -1,5 +1,6 @@
 --[[
-    Arwic UI Rework - Copyright (C) Arwic-Frostmourne
+    ElvUI_BetterTalentFrame
+    Copyright (C) Arwic-Frostmourne, All rights reserved.
 ]]--
 
 ---------- VARS ----------
@@ -12,18 +13,18 @@ local events = {}
 
 -- returns the pve talent info for a given spec at the given row and column
 local function GetCache_PveTalent(specIndex, row, col)
-    if ArwicTalentsDB["talents"]["pve"][specIndex] == nil then
+    if ElvUI_BetterTalentFrameDB["talents"]["pve"][specIndex] == nil then
         return nil
     end
-    return ArwicTalentsDB["talents"]["pve"][specIndex][row][col]
+    return ElvUI_BetterTalentFrameDB["talents"]["pve"][specIndex][row][col]
 end
 
 -- returns the pvp talent info for a given spec at the given row and column
 local function GetCache_PvpTalent(specIndex, row, col)
-    if ArwicTalentsDB["talents"]["pvp"][specIndex] == nil then
+    if ElvUI_BetterTalentFrameDB["talents"]["pvp"][specIndex] == nil then
         return nil
     end
-    return ArwicTalentsDB["talents"]["pvp"][specIndex][row][col]
+    return ElvUI_BetterTalentFrameDB["talents"]["pvp"][specIndex][row][col]
 end
 
 -- returns the given talent button
@@ -49,16 +50,16 @@ end
 -- caches the current specs talent configuration
 local function UpdateTalentCache()
     -- only create these if they dont exists
-    if ArwicTalentsDB == nil then ArwicTalentsDB = {} end
-    if ArwicTalentsDB["talents"] == nil then ArwicTalentsDB["talents"] = {} end
-    if ArwicTalentsDB["talents"]["pve"] == nil then ArwicTalentsDB["talents"]["pve"] = {} end
-    if ArwicTalentsDB["talents"]["pvp"] == nil then ArwicTalentsDB["talents"]["pvp"] = {} end
+    if ElvUI_BetterTalentFrameDB == nil then ElvUI_BetterTalentFrameDB = {} end
+    if ElvUI_BetterTalentFrameDB["talents"] == nil then ElvUI_BetterTalentFrameDB["talents"] = {} end
+    if ElvUI_BetterTalentFrameDB["talents"]["pve"] == nil then ElvUI_BetterTalentFrameDB["talents"]["pve"] = {} end
+    if ElvUI_BetterTalentFrameDB["talents"]["pvp"] == nil then ElvUI_BetterTalentFrameDB["talents"]["pvp"] = {} end
     -- always recreate this
-    ArwicTalentsDB["talents"]["pve"][GetSpecialization()] = {}
-    ArwicTalentsDB["talents"]["pvp"][GetSpecialization()] = {}
+    ElvUI_BetterTalentFrameDB["talents"]["pve"][GetSpecialization()] = {}
+    ElvUI_BetterTalentFrameDB["talents"]["pvp"][GetSpecialization()] = {}
 
     -- cache talent infos
-    local curSpec = ArwicTalentsDB["talents"]["pve"][GetSpecialization()]
+    local curSpec = ElvUI_BetterTalentFrameDB["talents"]["pve"][GetSpecialization()]
     for i = 1, 7, 1 do
         curSpec[i] = {}
         for j = 1, 3, 1 do
@@ -74,7 +75,7 @@ local function UpdateTalentCache()
         end
     end
     -- cache honor talent infos
-    local curPvpSpec = ArwicTalentsDB["talents"]["pvp"][GetSpecialization()]
+    local curPvpSpec = ElvUI_BetterTalentFrameDB["talents"]["pvp"][GetSpecialization()]
     for i = 1, 6, 1 do
         curPvpSpec[i] = {}
         for j = 1, 3, 1 do
@@ -387,11 +388,11 @@ end
 
 function AUIR_Talents_Init()
     -- init db
-    if ArwicTalentsDB == nil then
-        ArwicTalentsDB = {}
-        ArwicTalentsDB["talents"] = {}
-        ArwicTalentsDB["talents"]["pve"] = {}
-        ArwicTalentsDB["talents"]["pvp"] = {}
+    if ElvUI_BetterTalentFrameDB == nil then
+        ElvUI_BetterTalentFrameDB = {}
+        ElvUI_BetterTalentFrameDB["talents"] = {}
+        ElvUI_BetterTalentFrameDB["talents"]["pve"] = {}
+        ElvUI_BetterTalentFrameDB["talents"]["pvp"] = {}
     end
 
     -- register events

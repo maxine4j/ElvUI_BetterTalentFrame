@@ -1,0 +1,11 @@
+## Interface: 70300
+## Title: |cfffe7b2cElvUI|r BetterTalentFrame
+## Version: v1.0.0
+## Author: Arwic-Frostmourne
+## Notes: Various Improvements to the talents frame
+## SavedVariablesPerCharacter: ElvUI_BetterTalentFrameDB
+## SavedVariables: ElvUI_BetterTalentFrameGlobalDB
+## Dependencies: ElvUI
+
+TalentFrameRework.lua
+TalentProfiles.lua

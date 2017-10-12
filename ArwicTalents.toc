@@ -1,8 +1,0 @@
-## Interface: 70300
-## Title: Arwic Talents
-## Version: v1.0.0
-## Author: Arwic-Frostmourne
-## Notes: Improves the talent interface
-## SavedVariablesPerCharacter: ArwicTalentsDB
-
-Talents.lua
