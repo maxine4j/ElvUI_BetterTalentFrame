@@ -1,3 +1,3 @@
-# ArwicUIRework
+# Arwic Talents
 
-Reworks some of the default Blizzard frames
+Improved Talent Interface.
