@@ -12,18 +12,18 @@ local events = {}
 
 -- returns the pve talent info for a given spec at the given row and column
 local function GetCache_PveTalent(specIndex, row, col)
-    if ArwicUIReworkDB["talents"]["pve"][specIndex] == nil then
+    if ArwicTalentsDB["talents"]["pve"][specIndex] == nil then
         return nil
     end
-    return ArwicUIReworkDB["talents"]["pve"][specIndex][row][col]
+    return ArwicTalentsDB["talents"]["pve"][specIndex][row][col]
 end
 
 -- returns the pvp talent info for a given spec at the given row and column
 local function GetCache_PvpTalent(specIndex, row, col)
-    if ArwicUIReworkDB["talents"]["pvp"][specIndex] == nil then
+    if ArwicTalentsDB["talents"]["pvp"][specIndex] == nil then
         return nil
     end
-    return ArwicUIReworkDB["talents"]["pvp"][specIndex][row][col]
+    return ArwicTalentsDB["talents"]["pvp"][specIndex][row][col]
 end
 
 -- returns the given talent button
@@ -49,16 +49,16 @@ end
 -- caches the current specs talent configuration
 local function UpdateTalentCache()
     -- only create these if they dont exists
-    if ArwicUIReworkDB == nil then ArwicUIReworkDB = {} end
-    if ArwicUIReworkDB["talents"] == nil then ArwicUIReworkDB["talents"] = {} end
-    if ArwicUIReworkDB["talents"]["pve"] == nil then ArwicUIReworkDB["talents"]["pve"] = {} end
-    if ArwicUIReworkDB["talents"]["pvp"] == nil then ArwicUIReworkDB["talents"]["pvp"] = {} end
+    if ArwicTalentsDB == nil then ArwicTalentsDB = {} end
+    if ArwicTalentsDB["talents"] == nil then ArwicTalentsDB["talents"] = {} end
+    if ArwicTalentsDB["talents"]["pve"] == nil then ArwicTalentsDB["talents"]["pve"] = {} end
+    if ArwicTalentsDB["talents"]["pvp"] == nil then ArwicTalentsDB["talents"]["pvp"] = {} end
     -- always recreate this
-    ArwicUIReworkDB["talents"]["pve"][GetSpecialization()] = {}
-    ArwicUIReworkDB["talents"]["pvp"][GetSpecialization()] = {}
+    ArwicTalentsDB["talents"]["pve"][GetSpecialization()] = {}
+    ArwicTalentsDB["talents"]["pvp"][GetSpecialization()] = {}
 
     -- cache talent infos
-    local curSpec = ArwicUIReworkDB["talents"]["pve"][GetSpecialization()]
+    local curSpec = ArwicTalentsDB["talents"]["pve"][GetSpecialization()]
     for i = 1, 7, 1 do
         curSpec[i] = {}
         for j = 1, 3, 1 do
@@ -74,7 +74,7 @@ local function UpdateTalentCache()
         end
     end
     -- cache honor talent infos
-    local curPvpSpec = ArwicUIReworkDB["talents"]["pvp"][GetSpecialization()]
+    local curPvpSpec = ArwicTalentsDB["talents"]["pvp"][GetSpecialization()]
     for i = 1, 6, 1 do
         curPvpSpec[i] = {}
         for j = 1, 3, 1 do
@@ -387,11 +387,11 @@ end
 
 function AUIR_Talents_Init()
     -- init db
-    if ArwicUIReworkDB == nil then
-        ArwicUIReworkDB = {}
-        ArwicUIReworkDB["talents"] = {}
-        ArwicUIReworkDB["talents"]["pve"] = {}
-        ArwicUIReworkDB["talents"]["pvp"] = {}
+    if ArwicTalentsDB == nil then
+        ArwicTalentsDB = {}
+        ArwicTalentsDB["talents"] = {}
+        ArwicTalentsDB["talents"]["pve"] = {}
+        ArwicTalentsDB["talents"]["pvp"] = {}
     end
 
     -- register events
