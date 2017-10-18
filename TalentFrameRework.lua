@@ -138,7 +138,13 @@ local function UpdateTab_Talents()
                     -- enable the buttons click event as this is the currently active spec
                     btn:SetScript("OnClick", PlayerTalentButton_OnClick)
                     -- active specs have green highlighs
-                    btn.bg.SelectedTexture:SetColorTexture(23/255, 49/255, 23/255, 1.0)
+                    if IsAddOnLoaded("ElvUI_MerathilisUI") then
+                        local _, classId = UnitClass("player")
+                        local color = RAID_CLASS_COLORS[classId]
+                        btn.bg.SelectedTexture:SetColorTexture(color.r, color.g, color.b, 1.0)
+                    else
+                        btn.bg.SelectedTexture:SetColorTexture(23/255, 49/255, 23/255, 1.0)
+                    end
                     btn.bg.SelectedTexture:SetShown(talentInfo.selected)
                 else
                     -- disable the buttons click event as this is not the currently active spec
@@ -320,6 +326,8 @@ local function InitTab_Talents()
     local buttonSepX = 0
     local buttonSepY = 9
     for i = 1, 7, 1 do
+        local t = _G["PlayerTalentFrameTalentsTalentRow" .. i .. "Level"]
+        t:Hide()
         for j = 1, 3, 1 do
             local t = _G["PlayerTalentFrameTalentsTalentRow" .. i .. "Talent" .. j]
             t:SetPoint("TOPLEFT", PlayerTalentFrameTalents, "TOPLEFT", 
