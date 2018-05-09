@@ -19,14 +19,6 @@ local function GetCache_PveTalent(specIndex, row, col)
     return ElvUI_BetterTalentFrameDB["talents"]["pve"][specIndex][row][col]
 end
 
--- returns the pvp talent info for a given spec at the given row and column
-local function GetCache_PvpTalent(specIndex, row, col)
-    if ElvUI_BetterTalentFrameDB["talents"]["pvp"][specIndex] == nil then
-        return nil
-    end
-    return ElvUI_BetterTalentFrameDB["talents"]["pvp"][specIndex][row][col]
-end
-
 -- returns the given talent button
 local function GetFrame_TalentButton(row, col)
     return _G["PlayerTalentFrameTalentsTalentRow" .. row .. "Talent" .. col]
@@ -37,26 +29,14 @@ local function GetFrame_TalentButtonIconTexture(row, col)
     return _G["PlayerTalentFrameTalentsTalentRow" .. row .. "Talent" .. col .. "IconTexture"]
 end
 
--- returns the given talent button
-local function GetFrame_PvpTalentButton(row, col)
-    return PlayerTalentFramePVPTalents.Talents["Tier" .. row]["Talent" .. col]
-end
-
--- returns the texture widget of the given talent button
-local function GetFrame_PvpTalentButtonIconTexture(row, col)
-    return GetFrame_PvpTalentButton(row, col).Icon
-end
-
 -- caches the current specs talent configuration
 local function UpdateTalentCache()
     -- only create these if they dont exists
     if ElvUI_BetterTalentFrameDB == nil then ElvUI_BetterTalentFrameDB = {} end
     if ElvUI_BetterTalentFrameDB["talents"] == nil then ElvUI_BetterTalentFrameDB["talents"] = {} end
     if ElvUI_BetterTalentFrameDB["talents"]["pve"] == nil then ElvUI_BetterTalentFrameDB["talents"]["pve"] = {} end
-    if ElvUI_BetterTalentFrameDB["talents"]["pvp"] == nil then ElvUI_BetterTalentFrameDB["talents"]["pvp"] = {} end
     -- always recreate this
     ElvUI_BetterTalentFrameDB["talents"]["pve"][GetSpecialization()] = {}
-    ElvUI_BetterTalentFrameDB["talents"]["pvp"][GetSpecialization()] = {}
 
     -- cache talent infos
     local curSpec = ElvUI_BetterTalentFrameDB["talents"]["pve"][GetSpecialization()]
@@ -72,22 +52,6 @@ local function UpdateTalentCache()
             curSpec[i][j].spellid, 
             curSpec[i][j].tier, 
             curSpec[i][j].column = GetTalentInfo(i, j, GetActiveSpecGroup())
-        end
-    end
-    -- cache honor talent infos
-    local curPvpSpec = ElvUI_BetterTalentFrameDB["talents"]["pvp"][GetSpecialization()]
-    for i = 1, 6, 1 do
-        curPvpSpec[i] = {}
-        for j = 1, 3, 1 do
-            curPvpSpec[i][j] = {}
-            curPvpSpec[i][j].talentID, 
-            curPvpSpec[i][j].name, 
-            curPvpSpec[i][j].texture, 
-            curPvpSpec[i][j].selected, 
-            curPvpSpec[i][j].available, 
-            curPvpSpec[i][j].spellid, 
-            curPvpSpec[i][j].tier, 
-            curPvpSpec[i][j].column = GetPvpTalentInfo(i, j, GetActiveSpecGroup())
         end
     end
 end
@@ -172,64 +136,6 @@ local function UpdateTab_Talents()
     end
 end
 
-local function UpdateTab_HonorTalents()
-    UpdateTalentCache()
-    -- replace the current talent buttons with the selected specs talents
-    for i = 1, 6, 1 do
-        for j = 1, 3, 1 do
-            -- get vars
-            local btn = GetFrame_PvpTalentButton(i, j)
-            local talentInfo = GetCache_PvpTalent(ARWICUIR_selectedSpec, i, j)
-            local btnTexture = GetFrame_PvpTalentButtonIconTexture(i, j)
-
-            if talentInfo ~= nil then
-                -- update the talent buttons
-                btn.Name:SetText(talentInfo.name)
-                btn.Icon:SetTexture(talentInfo.texture)
-                -- select the correct buttons
-                btnTexture:SetDesaturated(not (talentInfo.selected and ARWICUIR_selectedSpec == GetSpecialization()))
-                -- setup tooltip
-                btn:SetScript("OnEnter", function(self)
-                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-                    GameTooltip:SetPvpTalent(talentInfo.talentID)
-                    GameTooltip:Show()
-                end)
-                btn:SetScript("OnLeave", function(self)
-                    GameTooltip_Hide()
-                end)
-
-                if ARWICUIR_selectedSpec == GetSpecialization() then
-                    -- enable the buttons click event as this is the currently active spec
-                    btn:SetScript("OnClick", PlayerPVPTalentButton_OnClick)
-                    -- active specs have green highlighs
-                    btn.bg.SelectedTexture:SetColorTexture(23/255, 49/255, 23/255, 1.0)
-                    btn.bg.SelectedTexture:SetShown(talentInfo.selected)
-                else
-                    -- disable the buttons click event as this is not the currently active spec
-                    btn:SetScript("OnClick", function(...) end)
-                    -- non active specs have grey highlighs
-                    btn.bg.SelectedTexture:SetColorTexture(55/255, 55/255, 55/255, 1.0)
-                    btn.bg.SelectedTexture:SetShown(talentInfo.selected)
-                end
-            else
-                -- Unknown message
-                btn.Name:SetText("Unknown Talent")
-                btn.Icon:SetTexture(0)
-                btn.bg.SelectedTexture:SetShown(false)
-                btn:SetScript("OnEnter", function(self)
-                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-                    GameTooltip:SetText("Unknown Talent", 1, 0, 0)
-                    GameTooltip:AddLine("Activate this specialization to update this talent.", nil, nil, nil, true)
-                    GameTooltip:Show()
-                end)
-                btn:SetScript("OnLeave", function(self)
-                    GameTooltip_Hide()
-                end)
-            end
-        end
-    end
-end
-
 local function UpdateTab_Pet()
 end
 
@@ -237,7 +143,6 @@ function UpdateAll()
     Update_Global()
     UpdateTab_Specialization()
     UpdateTab_Talents()
-    UpdateTab_HonorTalents()
     UpdateTab_Pet()
 end
 
@@ -265,6 +170,7 @@ local function Init_Global()
         local specID, specName, specDesc, specIcon, specRole, specPriStat = GetSpecializationInfo(i)
         -- create the button
         btn = CreateFrame("Button", "AUIR_SpecTab" .. i, PlayerTalentFrame)
+        btn:SetFrameStrata("LOW")
         btn:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPRIGHT", tabXOffset, -((tabSep + tabDim) * i))
         btn:SetSize(tabDim, tabDim)
         btn:CreateBackdrop("Default") -- ElvUI func
@@ -339,10 +245,6 @@ local function InitTab_Talents()
     UpdateTab_Talents()
 end
 
-local function InitTab_HonorTalents()
-    UpdateTab_HonorTalents()
-end
-
 local function InitTab_Pet()
     local _, playerClass = UnitClass("player");
 	if (playerClass == "HUNTER") then
@@ -382,10 +284,8 @@ function events:PLAYER_LOGIN(...)
     Init_Global()
     InitTab_Specialization()
     InitTab_Talents()
-    InitTab_HonorTalents()
     InitTab_Pet()
     hooksecurefunc("PlayerTalentFrame_Update", UpdateAll)
-    hooksecurefunc("PVPTalentFrame_Update", UpdateAll)
 end
 
 function events:PLAYER_LOGOUT(...)
@@ -400,7 +300,6 @@ function AUIR_Talents_Init()
         ElvUI_BetterTalentFrameDB = {}
         ElvUI_BetterTalentFrameDB["talents"] = {}
         ElvUI_BetterTalentFrameDB["talents"]["pve"] = {}
-        ElvUI_BetterTalentFrameDB["talents"]["pvp"] = {}
     end
 
     -- register events
