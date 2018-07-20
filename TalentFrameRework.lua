@@ -81,7 +81,10 @@ local function UpdateTab_Talents()
             local btn = GetFrame_TalentButton(i, j)
             local talentInfo = GetCache_PveTalent(ARWICUIR_selectedSpec, i, j)
             local btnTexture = GetFrame_TalentButtonIconTexture(i, j)
-            
+            if btn.ShadowedTexture ~= nil then
+                btn.ShadowedTexture:Hide()
+            end
+
             if talentInfo ~= nil then
                 -- update the talent buttons
                 btn.name:SetText(talentInfo.name)
@@ -114,7 +117,7 @@ local function UpdateTab_Talents()
                     -- disable the buttons click event as this is not the currently active spec
                     btn:SetScript("OnClick", function(...) end)
                     -- non active specs have grey highlighs
-                    btn.bg.SelectedTexture:SetColorTexture(55/255, 55/255, 55/255, 1.0)
+                    btn.bg.SelectedTexture:SetColorTexture(75/255, 75/255, 75/255, 1.0)
                     btn.bg.SelectedTexture:SetShown(talentInfo.selected)
                 end
             else
@@ -212,62 +215,14 @@ local function Init_Global()
 end
 
 local function InitTab_Specialization()
-    -- center spec info
-    PlayerTalentFrameSpecializationSpellScrollFrame:ClearAllPoints()
-    PlayerTalentFrameSpecializationSpellScrollFrame:SetPoint("CENTER", PlayerTalentFrameSpecialization, "CENTER", 0, 0)
-    -- remove spec buttons
-    for i = 1, GetNumSpecializations(), 1 do
-        local btn = _G["PlayerTalentFrameSpecializationSpecButton" .. i]
-        btn:Hide()
-    end
-
     UpdateTab_Specialization()
 end
 
 local function InitTab_Talents()
-    local offsetX = 4
-    local offsetY = 16
-    local buttonWidth = 210
-    local buttonHeight = 42
-    local buttonSepX = 0
-    local buttonSepY = 9
-    for i = 1, 7, 1 do
-        local t = _G["PlayerTalentFrameTalentsTalentRow" .. i .. "Level"]
-        t:Hide()
-        for j = 1, 3, 1 do
-            local t = _G["PlayerTalentFrameTalentsTalentRow" .. i .. "Talent" .. j]
-            t:SetPoint("TOPLEFT", PlayerTalentFrameTalents, "TOPLEFT", 
-            offsetX + ((j - 1) * (buttonWidth + buttonSepX)), -(offsetY + ((i - 1) * (buttonHeight + buttonSepY))))
-            t:SetSize(buttonWidth, buttonHeight)
-        end
-    end
-
     UpdateTab_Talents()
 end
 
 local function InitTab_Pet()
-    local _, playerClass = UnitClass("player");
-	if (playerClass == "HUNTER") then
-        -- centers the pet spec info
-        PlayerTalentFramePetSpecializationSpellScrollFrame:ClearAllPoints()
-        PlayerTalentFramePetSpecializationSpellScrollFrame:SetPoint("CENTER", PlayerTalentFrameSpecialization, "CENTER", 0, 0)
-        -- positions the pet spec buttons
-        PlayerTalentFramePetSpecializationSpecButton1:ClearAllPoints()
-        PlayerTalentFramePetSpecializationSpecButton1:SetPoint("CENTER", PlayerTalentFramePetSpecialization, "BOTTOMLEFT", 100, 70)
-        PlayerTalentFramePetSpecializationSpecButton2:ClearAllPoints()
-        PlayerTalentFramePetSpecializationSpecButton2:SetPoint("CENTER", PlayerTalentFramePetSpecialization, "BOTTOM", -8, 70)
-        PlayerTalentFramePetSpecializationSpecButton3:ClearAllPoints()
-        PlayerTalentFramePetSpecializationSpecButton3:SetPoint("CENTER", PlayerTalentFramePetSpecialization, "BOTTOMRIGHT", -115, 70)
-        -- rename pet button avoid confusion with the player spec activate button
-        local activateButtonWidth = 200
-        local activateButtonHeight = 20
-        PlayerTalentFramePetSpecializationLearnButton:SetText("Activate Pet Specialization")
-        PlayerTalentFramePetSpecializationLearnButton:SetSize(activateButtonWidth, activateButtonHeight)
-        -- move the pet activate button otherwise the player activate button will cover it
-        PlayerTalentFramePetSpecializationLearnButton:ClearAllPoints()
-        PlayerTalentFramePetSpecializationLearnButton:SetPoint("CENTER", PlayerTalentFrameSpecializationLearnButton, "CENTER", 0, 30)
-    end
-
     UpdateTab_Pet()
 end
 
