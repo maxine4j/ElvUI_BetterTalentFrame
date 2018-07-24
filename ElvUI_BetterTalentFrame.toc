@@ -1,6 +1,6 @@
 ## Interface: 80000
 ## Title: |cfffe7b2cElvUI|r BetterTalentFrame
-## Version: v1.1.2
+## Version: v1.1.3
 ## Author: Arwic-Frostmourne
 ## Notes: Various Improvements to the talents frame
 ## SavedVariablesPerCharacter: ElvUI_BetterTalentFrameDB

@@ -402,7 +402,7 @@ end
 
 function TalentProfiles.Events:PLAYER_LOGIN()
     -- Init Vars
-    _, playerClass, _ = UnitClass("player"); -- playerClass is localisation independent
+    playerClass = select(2, UnitClass("player")) -- playerClass is localisation independent
 
     -- Load DB
     TalentProfiles.DB:Verify()
