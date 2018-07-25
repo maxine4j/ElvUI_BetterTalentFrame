@@ -70,9 +70,12 @@ end
 
 local function UpdateTab_Specialization()
     PlayerTalentFrame_UpdateSpecFrame(PlayerTalentFrameSpecialization, ARWICUIR_selectedSpec)
-    --PlayerTalentFrameTab1:Hide()
-    --PlayerTalentFrameTab2:SetPoint("TOPLEFT", PlayerTalentFrame, "BOTTOMLEFT", 15, -4)
-    --PlayerTalentFrameTab2:SetPoint("TOPLEFT", PlayerTalentFrame, "BOTTOMLEFT", 15, -4)
+    for i = 1, GetNumSpecializations() do
+        _G["PlayerTalentFrameSpecializationSpecButton"..i]:SetScript("OnClick", function()
+            ARWICUIR_selectedSpec = i
+            UpdateAll()
+        end)
+    end
 end
 
 local function UpdateTab_Talents()
