@@ -200,7 +200,7 @@ end
 function TFR:InitSpecIcons()
     -- add new spec spellbook style tabs to the top right of the talent frame
     for i = 1, GetNumSpecializations() do
-        local _, specName, specDesc, specIcon, _, _ = GetSpecializationInfo(i)
+        local spedID, specName, specDesc, specIcon = GetSpecializationInfo(i)
         -- create the button
         btn = CreateFrame("Button", specTabPrefix .. i, PlayerTalentFrame)
         btn:SetFrameStrata("LOW")

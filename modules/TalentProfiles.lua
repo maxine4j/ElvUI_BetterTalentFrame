@@ -341,6 +341,10 @@ function TP:ARWIC_BTF_SPEC_SELECTION_CHANGED()
     self:TryDisplay()
 end
 
+function TP:PLAYER_SPECIALIZATION_CHANGED()
+    self:TryDisplay()
+end
+
 function TP:PLAYER_ENTERING_WORLD()
     TalentFrame_LoadUI() -- make sure the talent frame is loaded
     self.playerClass = select(2, UnitClass("player")) -- get player class
@@ -355,6 +359,7 @@ end
 function TP:Initialize()
     -- register events
     self:RegisterMessage("ARWIC_BTF_SPEC_SELECTION_CHANGED")
+    self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
