@@ -4,7 +4,7 @@
 ]]--
 
 local E, L, V, P, G = unpack(ElvUI) -- Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local BTF = E:NewModule("BetterTalentsFrame_Config", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
+local C = E:NewModule("BetterTalentsFrame_Config", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local EP = LibStub("LibElvUIPlugin-1.0")
 local addonName, addonTable = ...
 
@@ -14,7 +14,7 @@ P["BetterTalentsFrame"] = {
 	["AutoHidePvPTalents"] = false,
 }
 
-function BTF:InsertOptions()
+function C:InsertOptions()
 	E.Options.args.BetterTalentsFrame = {
 		order = 100,
 		type = "group",
@@ -46,8 +46,8 @@ function BTF:InsertOptions()
 	}
 end
 
-function BTF:Initialize()
-	EP:RegisterPlugin(addonName, BTF.InsertOptions)
+function C:Initialize()
+	EP:RegisterPlugin(addonName, C.InsertOptions)
 end
 
-E:RegisterModule(BTF:GetName())
+E:RegisterModule(C:GetName())
