@@ -321,32 +321,14 @@ end
 
 -------------------- Events/Hooks -------------------- 
 
--- Fired when talent the talent frame is toggled
-function TP:OnToggleTalentFrame()
-    -- Don't continue if the player doesn't have a talent frame yet (under level 10)
-    if PlayerTalentFrame == nil then
-        return
-    end
-
-    local selectedTab = PanelTemplates_GetSelectedTab(PlayerTalentFrame)
-    if selectedTab == 2 then -- Only show when the talents tab is open
-        -- Build the frame
-        self:BuildFrame()
-        -- Set the visibility of the profile selector to that of the talent frame
-        TalentProfiles_main:SetShown(PlayerTalentFrame:IsVisible())
-    end
-end
-
-function TP:OnPanelTemplates_SetTab()
+function TP:TryDisplay()
     -- Don't continue if the player doesn't have a talent frame yet (under level 10)
     if PlayerTalentFrame == nil then
         return
     end
     local selectedTab = PanelTemplates_GetSelectedTab(PlayerTalentFrame)
     if selectedTab == 2 then -- Only show when the talents tab is open
-        -- Build the frame
         self:BuildFrame()
-        -- Set the visibility of the profile selector to that of the talent frame
         TalentProfiles_main:Show()
     else
         if TalentProfiles_main ~= nil then
@@ -356,7 +338,7 @@ function TP:OnPanelTemplates_SetTab()
 end
 
 function TP:ARWIC_BTF_SPEC_SELECTION_CHANGED()
-    self:BuildFrame()
+    self:TryDisplay()
 end
 
 function TP:PLAYER_ENTERING_WORLD()
@@ -364,8 +346,8 @@ function TP:PLAYER_ENTERING_WORLD()
     self.playerClass = select(2, UnitClass("player")) -- get player class
     self:VerifyDB() -- Load DB
     -- Hook functions
-    self:SecureHook("ToggleTalentFrame", "OnToggleTalentFrame", true)
-    self:SecureHook("PanelTemplates_SetTab", "OnPanelTemplates_SetTab", true)
+    self:SecureHook("ToggleTalentFrame", "TryDisplay", true)
+    self:SecureHook("PanelTemplates_SetTab", "TryDisplay", true)
 end
 
 ---------- MAIN ----------
