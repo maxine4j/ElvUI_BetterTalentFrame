@@ -1,3 +1,8 @@
+--[[
+    ElvUI_BetterTalentFrame
+    Copyright (C) Arwic-Frostmourne, All rights reserved.
+]]--
+
 local E, L, V, P, G = unpack(ElvUI) -- Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local BTF = E:NewModule("BetterTalentsFrame_Config", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local EP = LibStub("LibElvUIPlugin-1.0")
