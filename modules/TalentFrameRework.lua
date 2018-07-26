@@ -14,6 +14,8 @@ local tabDim = 30
 local tabSep = 10
 local tabXOffset = 2
 local specTabPrefix = "ARWIC_TFR_SpecTab"
+local talentRowCount = 7
+local talentColCount = 3
 
 -- ensures the db is valid
 function TFR:VerifyDB()
@@ -55,9 +57,9 @@ function TFR:UpdateTalentCache()
 
     -- save the current specs talents
     local curSpec = ElvUI_BetterTalentFrameDB["talents"]["pve"][GetSpecialization()]
-    for i = 1, GetMaxTalentTier() do
+    for i = 1, talentRowCount do
         curSpec[i] = {}
-        for j = 1, 3 do
+        for j = 1, talentColCount do
             curSpec[i][j] = {}
             curSpec[i][j].talentID, 
             curSpec[i][j].name, 
@@ -102,8 +104,8 @@ function TFR:UpdateTalentsTab()
     -- update the talent cache
     self:UpdateTalentCache()
     -- replace the talent buttons with the selected specs talents
-    for i = 1, GetMaxTalentTier() do
-        for j = 1, 3 do
+    for i = 1, talentRowCount do
+        for j = 1, talentColCount do
             -- get vars
             local btn = self:GetTalentButtonFrame(i, j)
             local talentInfo = self:GetCachedTalentInfo(TFR.selectedSpec, i, j)
