@@ -312,7 +312,6 @@ function TP:BuildFrame()
     end
 
     local enabled = TFR.selectedSpec == GetSpecialization()
-    print(TFR.selectedSpec)
     btnApply:SetEnabled(enabled)
     btnSave:SetEnabled(enabled)
     btnRemove:SetEnabled(enabled)
