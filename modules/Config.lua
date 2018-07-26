@@ -23,7 +23,8 @@ function C:InsertOptions()
 			DefaultToTalentsTab = {
 				order = 1,
 				type = "toggle",
-				name = "Default To Talents Tab",
+				name = "Default to Talents Tab",
+				desc = "Defaults to the talents tab of the talent frame on login. By default WoW shows you the specialization tab.",
 				get = function(info)
 					return E.db.BetterTalentsFrame.DefaultToTalentsTab
 				end,
@@ -35,6 +36,7 @@ function C:InsertOptions()
 				order = 2,
 				type = "toggle",
 				name = "Auto Hide PvP Talents",
+				desc = "Closes the PvP talents flyout on login. PvP talents and warmode flag are still accessible by manually opening the PvP talents flyout.",
 				get = function(info)
 					return E.db.BetterTalentsFrame.AutoHidePvPTalents
 				end,
