@@ -312,6 +312,7 @@ function TP:BuildFrame()
     end
 
     local enabled = TFR.selectedSpec == GetSpecialization()
+    print(TFR.selectedSpec)
     btnApply:SetEnabled(enabled)
     btnSave:SetEnabled(enabled)
     btnRemove:SetEnabled(enabled)
@@ -355,6 +356,10 @@ function TP:OnPanelTemplates_SetTab()
     end
 end
 
+function TP:ARWIC_BTF_SPEC_SELECTION_CHANGED()
+    self:BuildFrame()
+end
+
 function TP:PLAYER_ENTERING_WORLD()
     TalentFrame_LoadUI() -- make sure the talent frame is loaded
     self.playerClass = select(2, UnitClass("player")) -- get player class
@@ -368,6 +373,7 @@ end
 
 function TP:Initialize()
     -- register events
+    self:RegisterMessage("ARWIC_BTF_SPEC_SELECTION_CHANGED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 

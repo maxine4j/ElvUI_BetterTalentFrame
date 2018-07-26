@@ -220,6 +220,7 @@ function TFR:InitSpecIcons()
         -- set a click action
         btn:SetScript("OnClick", function(self, button)
             TFR.selectedSpec = i
+            TFR:SendMessage("ARWIC_BTF_SPEC_SELECTION_CHANGED", TFR.selectedSpec)
             TFR:Update()
         end)
         -- give it an icon
