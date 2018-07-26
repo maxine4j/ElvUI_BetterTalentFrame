@@ -7,5 +7,7 @@
 ## SavedVariables: ElvUI_BetterTalentFrameGlobalDB
 ## Dependencies: ElvUI
 
-TalentFrameRework.lua
-TalentProfiles.lua
+Extensions.lua
+modules/Config.lua
+modules/TalentFrameRework.lua
+modules/TalentProfiles.lua

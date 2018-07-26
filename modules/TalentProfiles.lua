@@ -5,7 +5,8 @@
 
 -------------------- Vars -------------------- 
 
-local ElvUI_E, ElvUI_L, ElvUI_V, ElvUI_P, ElvUI_G, ElvUI_S
+local E, L, V, P, G = unpack(ElvUI) -- Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local TFR = E:GetModule("BetterTalentsFrame_TalentFrameRework")
 TalentProfiles = {}
 TalentProfiles.Events = {}
 TalentProfiles.DB = {}
@@ -14,21 +15,6 @@ local playerClass
 
 -------------------- LUA Extensions -------------------- 
 
--- Prints all the key value pairs in the given table (See python's dir() function)
-function dir(t)
-    for k, v in pairs(t) do
-        print(k, v)
-    end
-end
-
--- Returns the length of the given table
-function table.length(t)
-    local count = 0
-    for k, v in pairs(t) do
-        count = count + 1
-    end
-    return count
-end
 
 ---------- Helpers ----------
 
@@ -356,7 +342,7 @@ function TalentProfiles:BuildFrame()
         btnRemove:Show()
     end
 
-    local enabled = ARWICUIR_selectedSpec == GetSpecialization()
+    local enabled = TFR.selectedSpec == GetSpecialization()
     btnApply:SetEnabled(enabled)
     btnSave:SetEnabled(enabled)
     btnRemove:SetEnabled(enabled)
@@ -412,8 +398,8 @@ function TalentProfiles.Events:PLAYER_LOGIN()
     hooksecurefunc("PanelTemplates_SetTab", TalentProfiles.OnPanelTemplates_SetTab)
 
     -- Get ElvIU
-    ElvUI_E, ElvUI_L, ElvUI_V, ElvUI_P, ElvUI_G = unpack(ElvUI)
-    ElvUI_S = ElvUI_E:GetModule("Skins")
+    
+    ElvUI_S = E:GetModule("Skins")
 end
 
 ---------- MAIN ----------
