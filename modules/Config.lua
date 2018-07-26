@@ -5,6 +5,7 @@ local addonName, addonTable = ...
 
 -- defaults
 P["BetterTalentsFrame"] = {
+	["DefaultToTalentsTab"] = true,
 	["AutoHidePvPTalents"] = false,
 }
 
@@ -12,10 +13,21 @@ function BTF:InsertOptions()
 	E.Options.args.BetterTalentsFrame = {
 		order = 100,
 		type = "group",
-		name = "|cfffe7b2cBetterTalentsFrame|r",
+		name = "|cffff8000BetterTalentsFrame|r",
 		args = {
-			AutoHidePvPTalents = {
+			DefaultToTalentsTab = {
 				order = 1,
+				type = "toggle",
+				name = "Default To Talents Tab",
+				get = function(info)
+					return E.db.BetterTalentsFrame.DefaultToTalentsTab
+				end,
+				set = function(info, value)
+					E.db.BetterTalentsFrame.DefaultToTalentsTab = value
+				end,
+			},
+			AutoHidePvPTalents = {
+				order = 2,
 				type = "toggle",
 				name = "Auto Hide PvP Talents",
 				get = function(info)
@@ -23,7 +35,6 @@ function BTF:InsertOptions()
 				end,
 				set = function(info, value)
 					E.db.BetterTalentsFrame.AutoHidePvPTalents = value
-					BetterTalentsFrame:Update()
 				end,
 			},
 		},

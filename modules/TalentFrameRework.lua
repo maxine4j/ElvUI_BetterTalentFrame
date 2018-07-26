@@ -15,7 +15,7 @@ local tabSep = 10
 local tabXOffset = 2
 local specTabPrefix = "ARWIC_TFR_SpecTab"
 
--- ensures the db exists
+-- ensures the db is valid
 function TFR:VerifyDB()
     if ElvUI_BetterTalentFrameDB == nil then
         ElvUI_BetterTalentFrameDB = {}
@@ -242,34 +242,41 @@ function TFR:InitSpecIcons()
     end
 end
 
-function TFR:OnLogin()
-    -- make sure the talent frame is loaded
-    ToggleTalentFrame()
+function TFR:PLAYER_SPECIALIZATION_CHANGED()
+    self:UpdateTalentCache()
+end
 
+function TFR:PLAYER_LOGOUT()
+    self:UpdateTalentCache()
+end
+
+function TFR:PLAYER_ENTERING_WORLD()
+    TalentFrame_LoadUI() -- make sure the talent frame is loaded
     self:VerifyDB() -- make sure the db exists
     self:UpdateTalentCache() -- update the currently selected spec and talents
-    TFR.selectedSpec = GetSpecialization()
-    
+    TFR.selectedSpec = GetSpecialization() -- select the players current spec by default
     self:InitActivateButton() -- initialise the activate button
     self:InitSpecIcons() -- initialise the spec spellbook icons
     
-    PlayerTalentFrameTab2:Click() -- show the user the talents tab instead of the spec tab
-
-    -- hide the pvp talents flyout if desired
+    -- default to talents tab if required
+    if E.db.BetterTalentsFrame.DefaultToTalentsTab then
+        PlayerTalentFrameTab2:Click()
+    end
+    -- hide the pvp talents flyout if required
     if E.db.BetterTalentsFrame.AutoHidePvPTalents then
         PlayerTalentFrameTalentsPvpTalentButton:Click()
     end
 
-    self:Hook("PlayerTalentFrame_Update", "Update", true)
+    self:SecureHook("PlayerTalentFrame_Update", "Update")
 end
 
 ---------- MAIN ----------
 
 function TFR:Initialize()
     -- register events
-    self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "UpdateTalentCache")
-    self:RegisterEvent("PLAYER_LOGOUT", "UpdateTalentCache")
-    self:RegisterEvent("PLAYER_LOGIN", "OnLogin")
+    self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+    self:RegisterEvent("PLAYER_LOGOUT")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 E:RegisterModule(TFR:GetName())
