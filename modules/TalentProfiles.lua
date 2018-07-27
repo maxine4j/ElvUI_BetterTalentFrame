@@ -346,12 +346,15 @@ function TP:PLAYER_SPECIALIZATION_CHANGED()
 end
 
 function TP:PLAYER_ENTERING_WORLD()
-    TalentFrame_LoadUI() -- make sure the talent frame is loaded
-    self.playerClass = select(2, UnitClass("player")) -- get player class
-    self:VerifyDB() -- Load DB
-    -- Hook functions
-    self:SecureHook("ToggleTalentFrame", "TryDisplay", true)
-    self:SecureHook("PanelTemplates_SetTab", "TryDisplay", true)
+    if not self.hasRunOneTime then
+        TalentFrame_LoadUI() -- make sure the talent frame is loaded
+        self.playerClass = select(2, UnitClass("player")) -- get player class
+        self:VerifyDB() -- Load DB
+        -- Hook functions
+        self:SecureHook("ToggleTalentFrame", "TryDisplay", true)
+        self:SecureHook("PanelTemplates_SetTab", "TryDisplay", true)
+        self.hasRunOneTime = true
+    end
 end
 
 ---------- MAIN ----------

@@ -254,13 +254,17 @@ function TFR:PLAYER_LOGOUT()
 end
 
 function TFR:PLAYER_ENTERING_WORLD()
-    TalentFrame_LoadUI() -- make sure the talent frame is loaded
-    self:VerifyDB() -- make sure the db exists
-    self:UpdateTalentCache() -- update the currently selected spec and talents
-    TFR.selectedSpec = GetSpecialization() -- select the players current spec by default
-    self:InitActivateButton() -- initialise the activate button
-    self:InitSpecIcons() -- initialise the spec spellbook icons
-    
+    if not self.hasRunOneTime then
+        TalentFrame_LoadUI() -- make sure the talent frame is loaded
+        self:VerifyDB() -- make sure the db exists
+        self:UpdateTalentCache() -- update the currently selected spec and talents
+        TFR.selectedSpec = GetSpecialization() -- select the players current spec by default
+        self:InitActivateButton() -- initialise the activate button
+        self:InitSpecIcons() -- initialise the spec spellbook icons
+        self:SecureHook("PlayerTalentFrame_Update", "Update")
+        self.hasRunOneTime = true
+    end
+
     -- default to talents tab if required
     if E.db.BetterTalentsFrame.DefaultToTalentsTab then
         PlayerTalentFrameTab2:Click()
@@ -269,8 +273,6 @@ function TFR:PLAYER_ENTERING_WORLD()
     if E.db.BetterTalentsFrame.AutoHidePvPTalents then
         PlayerTalentFrameTalentsPvpTalentButton:Click()
     end
-
-    self:SecureHook("PlayerTalentFrame_Update", "Update")
 end
 
 ---------- MAIN ----------
