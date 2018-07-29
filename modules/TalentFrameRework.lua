@@ -262,16 +262,17 @@ function TFR:PLAYER_ENTERING_WORLD()
         self:InitActivateButton() -- initialise the activate button
         self:InitSpecIcons() -- initialise the spec spellbook icons
         self:SecureHook("PlayerTalentFrame_Update", "Update")
-        self.hasRunOneTime = true
-    end
 
-    -- default to talents tab if required
-    if E.db.BetterTalentsFrame.DefaultToTalentsTab then
-        PlayerTalentFrameTab2:Click()
-    end
-    -- hide the pvp talents flyout if required
-    if E.db.BetterTalentsFrame.AutoHidePvPTalents then
-        PlayerTalentFrameTalentsPvpTalentButton:Click()
+        -- default to talents tab if required
+        if E.db.BetterTalentsFrame.DefaultToTalentsTab then
+            PlayerTalentFrameTab2:Click()
+        end
+        -- hide the pvp talents flyout if required
+        if E.db.BetterTalentsFrame.AutoHidePvPTalents then
+            PlayerTalentFrameTalentsPvpTalentButton:Click()
+        end
+
+        self.hasRunOneTime = true
     end
 end
 
