@@ -42,6 +42,11 @@ function TP:GetTalentInfos()
     return talentInfos
 end
 
+-- Returns the talent info for each talent the user currently has available
+function TP:GetPvpTalentInfos()
+    return C_SpecializationInfo.GetAllSelectedPvpTalentIDs()
+end
+
 ---------- Database ----------
 
 -- ensures the db is valid
@@ -97,6 +102,7 @@ StaticPopupDialogs["TALENTPROFILES_ADD_PROFILE"] = {
         local profile = {}
         profile.name = name
         profile.talents = {}
+        profile.pvpTalents = TP:GetPvpTalentInfos()
         -- Get the currently selected talents
         local i = 1
         for k, v in pairs(talentInfos) do
@@ -139,6 +145,16 @@ function TP:ActivateProfile(index)
         for i = 1, GetMaxTalentTier() do
             LearnTalent(profile.talents[i])
         end
+        -- make sure pvp talents table exists
+        if profile.pvpTalents == nil then
+            profile.pvpTalents = {}
+        end
+        -- only attempt to learn pvp talents if the profile has any
+        if table.length(profile.pvpTalents) == 4 then
+            for i = 1, 4 do
+                LearnPvpTalent(profile.pvpTalents[i], i)
+            end
+        end
         -- Inform the user a profile was activated
         self:Print("Activated profile: '" .. profile.name .. "'")
     end
@@ -163,6 +179,7 @@ function TP:SaveProfile(index)
         end
         -- Update the selected talents
         local talentInfos = self:GetTalentInfos()
+        profile.pvpTalents = TP:GetPvpTalentInfos()
         local i = 1
         for k, v in pairs(talentInfos) do
             if v.selected == true then
