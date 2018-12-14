@@ -215,8 +215,8 @@ function TP:BuildFrame()
     local mainFrame = TalentProfiles_main
     if TalentProfiles_main == nil then
         mainFrame = CreateFrame("Frame", "TalentProfiles_main", PlayerTalentFrame)
-        mainFrame:SetSize(PlayerTalentFrameTopTileStreaks:GetWidth(), PlayerTalentFrameTopTileStreaks:GetHeight())
-        mainFrame:SetPoint("CENTER", PlayerTalentFrameTopTileStreaks, "CENTER", 0, 0)
+        mainFrame:SetSize(PlayerTalentFrame.NineSlice:GetWidth(), PlayerTalentFrame.NineSlice:GetHeight())
+        mainFrame:SetPoint("CENTER", PlayerTalentFrame.NineSlice, "CENTER", 0, -20)
     end
 
     -- Set up profiles dropdown, if it doesnt already exist
@@ -255,7 +255,7 @@ function TP:BuildFrame()
         info.func = function(sender)
             TP:StaticPopupShow_Add()
         end
-        info.rgb = { 1.0, 0.0, 1.0, 1.0 }
+        info.rgb = { 0.0, 0.0, 1.0, 1.0 }
         UIDropDownMenu_AddButton(info, level)
     end)
     UIDropDownMenu_SetSelectedID(dropdown, 1)
