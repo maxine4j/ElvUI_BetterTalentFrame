@@ -93,6 +93,7 @@ StaticPopupDialogs["TALENTPROFILES_ADD_PROFILE"] = {
     text = "Enter Profile Name:",
     button1 = "Save",
     button2 = "Cancel",
+    enterClicksFirstButton = true,
     OnAccept = function(sender)
         local name = sender.editBox:GetText()
         -- Ensure the database is ready
@@ -197,6 +198,7 @@ StaticPopupDialogs["TALENTPROFILES_REMOVE_PROFILE"] = {
     text = "Do you want to remove the profile '%s'?",
     button1 = "Yes",
     button2 = "No",
+    enterClicksFirstButton = true,
     OnAccept = function(sender)
         local key = nil
         local i = 1
