@@ -243,15 +243,15 @@ function TP:BuildFrame()
     local mainFrame = TalentProfiles_main
     if TalentProfiles_main == nil then
         mainFrame = CreateFrame("Frame", "TalentProfiles_main", PlayerTalentFrame)
-        mainFrame:SetSize(PlayerTalentFrame.NineSlice:GetWidth(), PlayerTalentFrame.NineSlice:GetHeight())
-        mainFrame:SetPoint("CENTER", PlayerTalentFrame.NineSlice, "CENTER", 0, -20)
+        mainFrame:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPLEFT")
+        mainFrame:SetPoint("BOTTOMRIGHT", PlayerTalentFrame, "BOTTOMRIGHT")
     end
 
     -- Set up profiles dropdown, if it doesnt already exist
     local dropdown = TalentProfiles_profilesDropDown
     if TalentProfiles_profilesDropDown == nil then
         dropdown = CreateFrame("Button", "TalentProfiles_profilesDropDown", TalentProfiles_main, "UIDropDownMenuTemplate")
-        dropdown:SetPoint("TOPLEFT", TalentProfiles_main, "TOPLEFT", 100, -13)
+        dropdown:SetPoint("TOPLEFT", TalentProfiles_main, "TOPLEFT", 60, -30)
         -- elvui dropdown skinning is bugged and makes the arrow button far too wide
         S:HandleDropDownBox(dropdown)
         -- so make it the correct size
@@ -296,7 +296,7 @@ function TP:BuildFrame()
         btnApply = CreateFrame("Button", "TalentProfiles_btnApply", TalentProfiles_main, "UIPanelButtonTemplate")
         btnApply:SetSize(btn_width, btn_height)
         btnApply:SetText("Apply")
-        btnApply:SetPoint("TOPLEFT", dropdown, "TOPRIGHT", btn_sepX + 107, -2)
+        btnApply:SetPoint("TOPLEFT", dropdown, "TOPRIGHT", btn_sepX, -2)
         S:HandleButton(btnApply)
         btnApply:SetScript("OnClick", function(sender)
             TP:VerifyDB()
