@@ -118,6 +118,9 @@ StaticPopupDialogs["TALENTPROFILES_ADD_PROFILE"] = {
         end
         -- Save the profile to the database
         TP:InsertProfile(profile)
+        -- update the active profile
+        local profileCount = table.length(TP:GetAllProfiles())
+        ElvUI_BetterTalentFrameDB.appliedProfile = profileCount
         -- Rebuild the frame with the new data
         TP:BuildFrame()
         -- Inform the user a profile was added
@@ -158,6 +161,8 @@ function TP:ActivateProfile(index)
         end
         -- Inform the user a profile was activated
         self:Print("Activated profile: '" .. profile.name .. "'")
+        -- save the profile index so we can set up the dropdown later
+        ElvUI_BetterTalentFrameDB.appliedProfile = index
     end
 end
 function ARWICTP_ActivateProfile(index) -- global for macros
@@ -210,6 +215,10 @@ StaticPopupDialogs["TALENTPROFILES_REMOVE_PROFILE"] = {
         end
         -- Cache the name
         local name = TP:GetProfile(TalentProfiles_profilesDropDown.selectedID).name
+        -- Update the applied profile index if required
+        if TalentProfiles_profilesDropDown.selectedID < ElvUI_BetterTalentFrameDB.appliedProfile then
+            ElvUI_BetterTalentFrameDB.appliedProfile = ElvUI_BetterTalentFrameDB.appliedProfile - 1
+        end
         -- Remove the profile
         TP:RemoveProfile(TalentProfiles_profilesDropDown.selectedID)
         TP:BuildFrame()
@@ -277,7 +286,7 @@ function TP:BuildFrame()
         info.rgb = { 0.0, 0.0, 1.0, 1.0 }
         UIDropDownMenu_AddButton(info, level)
     end)
-    UIDropDownMenu_SetSelectedID(dropdown, 1)
+    UIDropDownMenu_SetSelectedID(dropdown, ElvUI_BetterTalentFrameDB.appliedProfile)
     UIDropDownMenu_JustifyText(dropdown, "LEFT")
     dropdown:Show()
 
