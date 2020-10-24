@@ -156,7 +156,6 @@ function TP:ActivateProfile(index)
         -- only attempt to learn pvp talents if the profile has any
         if table.length(profile.pvpTalents) == 3 then
             for i = 1, 3 do
-                self:Print("Learning pvp talent " .. profile.pvpTalents[i] .. ", ", i)
                 LearnPvpTalent(profile.pvpTalents[i], i)
             end
         end
