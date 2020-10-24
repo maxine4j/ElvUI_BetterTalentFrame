@@ -1,4 +1,4 @@
-## Interface: 80205
+## Interface: 90001
 ## Title: |cfffe7b2cElvUI|r BetterTalentFrame
 ## Version: v1.4.0
 ## Author: Arwic-Frostmourne
