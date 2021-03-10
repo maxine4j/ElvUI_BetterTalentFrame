@@ -41,3 +41,14 @@ You still have to be in a city or inn (or have a talent change buff active) to b
     /equipset AoE
     /run ARWICTP_ActivateProfile(2)
 
+#### Chat Commands
+
+    -- activates talentprofile with ID <profileID>
+    -- IDs starting with 1
+    /talentprofiles activate <profileID>
+    
+    -- cycle through talentprofiles
+    /talentprofiles next
+
+    -- Info
+    "/tp" is an alias for "/talentprofiles"
