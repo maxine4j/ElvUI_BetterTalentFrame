@@ -47,6 +47,42 @@ function TP:GetPvpTalentInfos()
     return C_SpecializationInfo.GetAllSelectedPvpTalentIDs()
 end
 
+-- Returns the profile count
+function TP:GetAllProfilesCount()
+	return table.length(TP:GetAllProfiles())
+end
+
+---------- ChatCommands ------
+local function SetUpSlashCommands(msg, editbox)
+    local _, _, cmd, args = string.find(msg, "%s?(%w+)%s?(.*)")
+                
+    if cmd == "activate" and args ~= "" then
+        ARWICTP_ActivateProfile(tonumber(args))
+    elseif cmd == "next" and args == "" then
+            ARWICTP_ActivateNextProfile()
+    else
+        TP:Print('Syntax:')
+        TP:Print('/talentprofiles activate profileID')
+        TP:Print('/talentprofiles next')
+        TP:Print('Info: /tp is an alias for /talentprofiles')
+    end
+end
+
+SLASH_TALENTPROFILES1, SLASH_TALENTPROFILES2 = '/tp', '/talentprofiles'
+SlashCmdList["TALENTPROFILES"] = SetUpSlashCommands
+
+function ARWICTP_ActivateProfile(index)
+    TP:ActivateProfile(index)
+end
+
+function ARWICTP_ActivateNextProfile()
+    TP:ActivateNextProfile()
+end
+
+function ARWICTP_GetActiveProfile()
+    return TalentProfiles_profilesDropDown.selectedID
+end
+
 ---------- Database ----------
 
 -- ensures the db is valid
@@ -165,8 +201,17 @@ function TP:ActivateProfile(index)
         ElvUI_BetterTalentFrameDB.appliedProfile = index
     end
 end
-function ARWICTP_ActivateProfile(index) -- global for macros
-    TP:ActivateProfile(index)
+
+-- Activates the profile at the next index
+function TP:ActivateNextProfile()
+    local profileCount = self:GetAllProfilesCount()
+    local activeProfile = ElvUI_BetterTalentFrameDB.appliedProfile
+    local nextProfile = 1
+    if activeProfile < profileCount then
+        nextProfile = activeProfile + 1
+    end
+    self:ActivateProfile(nextProfile)
+    self:BuildFrame()
 end
 
 -- Saves the current talent configuration to the current profile
@@ -395,3 +440,4 @@ function TP:Initialize()
 end
 
 E:RegisterModule(TP:GetName())
+
